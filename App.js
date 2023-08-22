@@ -8,10 +8,6 @@ dotenv.config();
 const app = express();
 
 //MIDDLEWARES
-app.use(morgan("dev"));
-app.use(express.json())
-
-//ROUTES
 
 
 //SERVER LISTEN
