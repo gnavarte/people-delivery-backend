@@ -2,15 +2,46 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
+import mongoose from "mongoose";
+import helmet from "helmet";
+import multer from "multer";
 
-//SETUP
+import userRoutes from "./src/routes/usuarios.routes.js";
+import { register } from "./src/controllers/auth.js";
+
+/* SETUP */
 dotenv.config();
 const app = express();
+app.use(morgan("dev"));
+app.use(cors());
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
-//MIDDLEWARES
-
-
-//SERVER LISTEN
-app.listen(process.env.PORT, () => {
-  console.log(`>>> SERVER ON PORT ${process.env.PORT}`);
+/* FILE STORAGE */
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/assets");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
 });
+const upload = multer({ storage });
+
+/* ROUTES WITH FILES */
+app.post("/api/auth/register", upload.single("picture"), register);
+
+/* ROUTES */
+app.use("/api/users", userRoutes);
+
+/* MOONGOSE SETUP & SERVER START */
+const PORT = process.env.PORT || 6001;
+mongoose
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    app.listen(PORT, () => console.log(`>>> Server Port: ${PORT}`));
+  })
+  .catch((error) => console.log(`${error} did not connect.`));
