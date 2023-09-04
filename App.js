@@ -7,11 +7,14 @@ import helmet from "helmet";
 import multer from "multer";
 
 import userRoutes from "./src/routes/usuarios.routes.js";
+import authRoutes from "./src/routes/auth.routes.js";
+
 import { register } from "./src/controllers/auth.js";
 
 /* SETUP */
 dotenv.config();
 const app = express();
+app.use(express.json())
 app.use(morgan("dev"));
 app.use(cors());
 app.use(helmet());
@@ -33,6 +36,7 @@ app.post("/api/auth/register", upload.single("picture"), register);
 
 /* ROUTES */
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 /* MOONGOSE SETUP & SERVER START */
 const PORT = process.env.PORT || 6001;
