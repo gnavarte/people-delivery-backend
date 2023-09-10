@@ -8,6 +8,7 @@ import multer from "multer";
 
 import userRoutes from "./src/routes/usuarios.routes.js";
 import authRoutes from "./src/routes/auth.routes.js";
+import viajesRoutes from "./src/routes/viajes.routes.js"
 
 import { register } from "./src/controllers/auth.js";
 
@@ -35,8 +36,16 @@ const upload = multer({ storage });
 app.post("/api/auth/register", upload.single("picture"), register);
 
 /* ROUTES */
+app.get('/',(req,res) =>
+{
+  res.send('Bienvenido al back de DriverPeopleDelivery!')
+} )
+
+
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/viajes", viajesRoutes);
+
 
 /* MOONGOSE SETUP & SERVER START */
 const PORT = process.env.PORT || 6001;
