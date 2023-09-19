@@ -14,6 +14,11 @@ const UserSchema = new mongoose.Schema(
       min: 2,
       max: 50,
     },
+    genre: {
+      type: String,
+      required: true,
+      max: 1,
+    },
     address: {
       type: String,
       required: true,
@@ -26,6 +31,11 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    phone: {
+      type: String,
+      requried: true,
+    },
+
     email: {
       type: String,
       required: true,
