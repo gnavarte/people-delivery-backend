@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+//AGREGAR CALIFICACION CHOFER
+
 const UserSchema = new mongoose.Schema(
   {
     firstName: {
