@@ -5,7 +5,7 @@ import {
   getPagos,
   getPagosByIdViaje,
   getPagosByIdChofer,
-} from "../controllers/pagos";
+} from "../controllers/pagos.js";
 
 const router = express.Router();
 
