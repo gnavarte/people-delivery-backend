@@ -36,7 +36,6 @@ const ViajeSchema = new mongoose.Schema(
     },
     totalPrice:{
         type: String,
-        default:'0,0'
     }
   },
   {
