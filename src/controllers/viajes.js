@@ -3,13 +3,16 @@ import Viaje from "../models/Viajes.js";
 
 export const createViaje = async (req,res) =>{
     try {
-        const {choferID, startTimestamp,addressOrigin,addressDestination} = req.body
+        const {choferID, startTimestamp,addressOrigin,addressDestination,totalPrice,valoracion} = req.body
 
         const newViaje = new Viaje({
             choferID, 
             startTimestamp,
             addressOrigin,
-            addressDestination
+            addressDestination,
+            totalPrice,
+            valoracion
+
         })
         const savedViaje = await newViaje.save();
         res.status(201).json(savedViaje);
@@ -21,7 +24,8 @@ export const createViaje = async (req,res) =>{
 
 export const getViajes = async (req, res) => {
     try {
-      const viajes = await Viaje.find();
+      const {email} = req.body;
+      const viajes = await Viaje.find({choferID : email});
       res.status(200).json(viajes);
     } catch (error) {
       res.status(404).json({ error: error.message });

@@ -15,6 +15,7 @@ const ViajeSchema = new mongoose.Schema(
     startTimestamp: {
       type: Date
     },
+
     finishTimestamp:{
         type:Date
     },
@@ -35,8 +36,12 @@ const ViajeSchema = new mongoose.Schema(
         localidad:String
     },
     totalPrice:{
-        type: String,
-    }
+        type: Number,
+    },
+    valoracion: {
+      type: Number,
+      default:0
+    },
   },
   {
     timestamps: true,

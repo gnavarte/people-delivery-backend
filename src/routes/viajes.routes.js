@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/new", createViaje);
 
-router.get("/", getViajes);
+router.post("/", getViajes);
 router.get("/:id", getViajeByID);
 router.get("/chofer/:choferID", getViajesByChoferId);
 
