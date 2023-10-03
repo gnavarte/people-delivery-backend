@@ -21,7 +21,9 @@ export const newPago = async (req, res) => {
 //READ
 export const getPagos = async (req, res) => {
   try {
-    const pagos = await Pagos.find();
+    const { email } = req.body;
+    console.log(email)
+    const pagos = await Pagos.find({ choferId: email }); 
     res.status(200).json(pagos);
   } catch (error) {
     res.status(404).json({ error: error.message });
