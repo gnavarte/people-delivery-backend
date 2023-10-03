@@ -33,10 +33,6 @@ export const register = async (req, res) => {
 
 /* LOGIN */
 export const login = async (req, res, next) => {
-  console.log("login")
-  console.log("login")
-  console.log(req.body.email)
-  console.log(req.body.password)
   try {
 
     const { email, password } = req.body;

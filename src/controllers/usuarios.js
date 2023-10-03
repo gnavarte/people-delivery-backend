@@ -62,9 +62,8 @@ export const updateUsuario = async (req, res) => {
 };
 export const updatePassword = async (req, res) => {
   try {
-    const { actualPassword, newPassword } = req.body;
-    const { id } = req.params;
-    const user = await User.findById(id);
+    const { email, actualPassword, newPassword } = req.body;
+    const user = await User.findOne({email : email});
     const isMatch = await bcrypt.compare(actualPassword, user.password);
 
     if (!isMatch) {
