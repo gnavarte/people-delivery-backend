@@ -1,5 +1,5 @@
 import User from "../models/Usuarios.js";
-
+import bcrypt from "bcrypt";
 // READ
 export const getUsers = async (req, res) => {
   try {
@@ -60,3 +60,44 @@ export const updateUsuario = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+export const updatePassword = async (req, res) => {
+  try {
+    const { actualPassword, newPassword } = req.body;
+    const { id } = req.params;
+    const user = await User.findById(id);
+    const isMatch = await bcrypt.compare(actualPassword, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid credentials. " });
+    }
+    else {
+      const salt = await bcrypt.genSalt();
+      const passwordHash = await bcrypt.hash(newPassword, salt);
+      user.password = passwordHash;
+      user.save();
+      return res.status(200).json({ msg: "Password changed successfully. " });
+
+    }
+  }
+  catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
+export const  forgotPassword = async (req, res) => {
+  try {
+    const { email,newPassword } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) return res.status(400).json({ msg: 'User does not exist. ' });
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(newPassword, salt);
+    user.password = passwordHash;
+    user.save();
+    return res.status(200).json({ msg: "Password changed successfully. " });
+
+
+  }
+  catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+
+}
