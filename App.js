@@ -10,7 +10,7 @@ import userRoutes from "./src/routes/usuarios.routes.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import viajesRoutes from "./src/routes/viajes.routes.js";
 import pagosRoutes from "./src/routes/pagos.routes.js";
-
+import autosRoutes from "./src/routes/autos.routes.js";
 import { register } from "./src/controllers/auth.js";
 
 /* SETUP */
@@ -47,6 +47,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/viajes", viajesRoutes);
 app.use("/api/pagos", pagosRoutes);
+app.use("/api/autos", autosRoutes)
 
 /* MOONGOSE SETUP & SERVER START */
 const PORT = process.env.PORT || 6001;
