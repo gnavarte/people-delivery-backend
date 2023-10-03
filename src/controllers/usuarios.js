@@ -100,19 +100,16 @@ export const  forgotPassword = async (req, res) => {
   }
 
 }
-// ... (importaciones y código anterior)
+
 
 export const getUserByEmail = async (req, res) => {
   try {
     const { email } = req.body;
-
-    // Verifica si se proporciona un correo electrónico
+    console.log(email)
     if (!email) {
       return res.status(400).json({ message: "Debes proporcionar un correo electrónico" });
     }
-
-
-    const user = await UserModel.findOne({ email });
+    const user = await User.findOne({ email });
 
     if (user) {
       return res.status(201).json({ userID: user._id });

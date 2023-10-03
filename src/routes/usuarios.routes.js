@@ -5,6 +5,7 @@ import {
   getUserById,
   getUsers,
   updateUsuario,
+  getUserByEmail,
 } from "../controllers/usuarios.js";
 
 const router = express.Router();
@@ -17,6 +18,7 @@ router.post("/getByPlate", getByPlate);
 router.post("/getByDriverLic", getUserByDriverLic);
 
 // UPDATE
+router.post("/getByEmail", getUserByEmail);
 router.patch("/:id", updateUsuario);
 
 export default router;
