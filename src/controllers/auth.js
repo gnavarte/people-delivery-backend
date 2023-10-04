@@ -5,6 +5,7 @@ import User from "../models/Usuarios.js";
 // REGISTER USER
 export const register = async (req, res) => {
   try {
+
     const { firstName, lastName, address, dob, dni, picturePath, email, password } =
       req.body;
 
@@ -21,6 +22,7 @@ export const register = async (req, res) => {
       email,
       password: passwordHash,
     });
+    console.log(newUser)
 
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
@@ -30,18 +32,21 @@ export const register = async (req, res) => {
 };
 
 /* LOGIN */
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   try {
+
     const { email, password } = req.body;
 
-
     const user = await User.findOne({ email: email });
-    if (!user) return res.status(400).json({ msg: "User does not exist. " });
+
+    if (!user) return res.status(400).json({ msg: 'User does not exist. ' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials. " });
+
+    if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials. ' });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
     delete user.password;
 
     res.status(200).json({ token, user });

@@ -5,12 +5,12 @@ import cors from "cors";
 import mongoose from "mongoose";
 import helmet from "helmet";
 import multer from "multer";
-
+import displayRoutes from "express-routemap";
 import userRoutes from "./src/routes/usuarios.routes.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import viajesRoutes from "./src/routes/viajes.routes.js";
 import pagosRoutes from "./src/routes/pagos.routes.js";
-
+import autosRoutes from "./src/routes/autos.routes.js";
 import { register } from "./src/controllers/auth.js";
 
 /* SETUP */
@@ -21,6 +21,8 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
+
 
 /* FILE STORAGE */
 const storage = multer.diskStorage({
@@ -45,6 +47,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/viajes", viajesRoutes);
 app.use("/api/pagos", pagosRoutes);
+app.use("/api/autos", autosRoutes)
 
 /* MOONGOSE SETUP & SERVER START */
 const PORT = process.env.PORT || 6001;
@@ -54,6 +57,11 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(PORT, () => console.log(`>>> Server Port: ${PORT}`));
+
+    app.listen(PORT, () => 
+    {
+      console.log(`>>> Server Port: ${PORT}`);
+      displayRoutes(app);
+    });
   })
   .catch((error) => console.log(`${error} did not connect.`));
