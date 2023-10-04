@@ -60,3 +60,37 @@ export const updateUsuario = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+export const addCalificacion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { newRate } = req.body;
+
+    const user = await User.findOneAndUpdate(
+      { _id: id },
+      { $push: { rate: newRate } },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {}
+};
+
+export const setStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    console.log(id);
+
+    const user = await User.findById(id)
+    if (!user) return res.status(400).json({msg: 'Usuario no encontrado'})
+
+    user.status = !user.status;
+    user.save();
+   
+    res.status(200).json(user);
+  } catch (error) {}
+};
