@@ -48,6 +48,11 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    status: {
+      type: Boolean,
+      default: false,
+    },
+    rate: [{ type: Number, min: 1, max: 5 }],
     driverLic: String,
     carInformation: {
       carBrand: String,

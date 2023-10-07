@@ -60,6 +60,41 @@ export const updateUsuario = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+<<<<<<< HEAD
+
+export const addCalificacion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { newRate } = req.body;
+
+    const user = await User.findOneAndUpdate(
+      { _id: id },
+      { $push: { rate: newRate } },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {}
+};
+
+export const setStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    console.log(id);
+
+    const user = await User.findById(id)
+    if (!user) return res.status(400).json({msg: 'Usuario no encontrado'})
+
+    user.status = !user.status;
+    user.save();
+   
+    res.status(200).json(user);
+  } catch (error) {}
+=======
 export const updatePassword = async (req, res) => {
   try {
     const { email, actualPassword, newPassword } = req.body;
@@ -121,4 +156,5 @@ export const getUserByEmail = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Error del servidor" });
   }
+>>>>>>> 759d23ee6da8d6a50614c6046b21f7be2ffefb6b
 };
