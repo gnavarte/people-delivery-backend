@@ -7,6 +7,28 @@ npm run dev
 
 # API
 
+## Auth
+
+### Login
+
+- **Método**: POST
+- **Ruta**: `/api/auth/login`
+
+### Register
+
+- **Método**: POST
+- **Ruta**: `/api/auth/register`
+
+### Recuperar password
+
+- **Método**: POST
+- **Ruta**: `/api/auth/forgotPassword`
+
+### Actualizar Password
+
+- **Método**: POST
+- **Ruta**: `/api/auth/updatePwd`
+
 ## Usuarios
 
 ### Obtener todos los usuarios
