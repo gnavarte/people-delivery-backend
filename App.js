@@ -11,6 +11,7 @@ import authRoutes from "./src/routes/auth.routes.js";
 import viajesRoutes from "./src/routes/viajes.routes.js";
 import pagosRoutes from "./src/routes/pagos.routes.js";
 import autosRoutes from "./src/routes/autos.routes.js";
+import ticketsRoute from "./src/routes/tickets.routes.js";
 import { register } from "./src/controllers/auth.js";
 
 /* SETUP */
@@ -48,7 +49,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/viajes", viajesRoutes);
 app.use("/api/pagos", pagosRoutes);
 app.use("/api/autos", autosRoutes)
-
+app.use('/api/ticket', ticketsRoute)
 /* MOONGOSE SETUP & SERVER START */
 const PORT = process.env.PORT || 6001;
 mongoose
