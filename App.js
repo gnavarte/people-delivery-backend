@@ -62,11 +62,10 @@ io.on("connection", (socket) => {
 });
 
 /* SOCKET.IO ROUTES */
-app.post("/api/viajes/callback", (req, res) => {
-  const { message } = req.body;
-  console.log(`>>> Socket.io: ${message}`);
-  io.emit("message", message);
-  res.send("Message sent.");
+app.post("/api/viajes/newTripCallback", (req, res) => {
+  console.log(`>>> Socket.io: ${req.body} received.`);
+  io.emit("newTrip", req.body);
+  res.status(200).send("New trip data received.");
 }
 );
 
