@@ -12,6 +12,8 @@ import viajesRoutes from "./src/routes/viajes.routes.js";
 import pagosRoutes from "./src/routes/pagos.routes.js";
 import autosRoutes from "./src/routes/autos.routes.js";
 import { register } from "./src/controllers/auth.js";
+import { Server } from "socket.io";
+import { createServer } from "http";
 
 /* SETUP */
 dotenv.config();
@@ -49,6 +51,25 @@ app.use("/api/viajes", viajesRoutes);
 app.use("/api/pagos", pagosRoutes);
 app.use("/api/autos", autosRoutes)
 
+/* SOCKET.IO */
+const httpServer = createServer(app);
+const io = new Server(httpServer, { cors: { origin: "*" } });
+io.on("connection", (socket) => {
+  console.log(`>>> Socket.io: ${socket.id} connected.`);
+  socket.on("disconnect", () => {
+    console.log(`>>> Socket.io: ${socket.id} disconnected.`);
+  });
+});
+
+/* SOCKET.IO ROUTES */
+app.post("/api/viajes/callback", (req, res) => {
+  const { message } = req.body;
+  console.log(`>>> Socket.io: ${message}`);
+  io.emit("message", message);
+  res.send("Message sent.");
+}
+);
+
 /* MOONGOSE SETUP & SERVER START */
 const PORT = process.env.PORT || 6001;
 mongoose
@@ -57,10 +78,8 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-
-    app.listen(PORT, () => 
-    {
-      console.log(`>>> Server Port: ${PORT}`);
+    httpServer.listen(PORT, () => {
+      console.log(`>>> Server running on port ${PORT}.`);
       displayRoutes(app);
     });
   })
