@@ -50,6 +50,8 @@ app.use("/api/viajes", viajesRoutes);
 app.use("/api/pagos", pagosRoutes);
 app.use("/api/autos", autosRoutes)
 app.use('/api/ticket', ticketsRoute)
+
+
 /* MOONGOSE SETUP & SERVER START */
 const PORT = process.env.PORT || 6001;
 mongoose

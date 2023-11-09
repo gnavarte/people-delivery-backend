@@ -7,7 +7,7 @@ import {
   getUsers,
   setStatus,
   updateUsuario,
-  // getUserByEmail,
+  getCalificacionesById
 } from "../controllers/usuarios.js";
 
 const router = express.Router();
@@ -15,6 +15,8 @@ const router = express.Router();
 // READ
 router.get("/", getUsers);
 router.get("/:id", getUserById);
+
+router.get('/calificaciones/:id', getCalificacionesById)
 
 router.post("/getByPlate", getByPlate);
 router.post("/getByDriverLic", getUserByDriverLic);

@@ -2,45 +2,49 @@ import mongoose from "mongoose";
 
 const ViajeSchema = new mongoose.Schema(
   {
-    choferID:
-    {
-        type: String,
-        required: true,
+    choferID: {
+      type: String,
+      required: true,
     },
-    status:{
-        type:String,
-        default: 'Looking for driver'
-        //looking for driver -> driver assigned -> in progress -> finished
+    status: {
+      type: String,
+      default: "Looking for driver",
+      //looking for driver -> driver assigned -> in progress -> finished
     },
     startTimestamp: {
-      type: Date
+      type: Date,
     },
 
-    finishTimestamp:{
-        type:Date
+    finishTimestamp: {
+      type: Date,
     },
     duration_sec: {
       type: Number,
-      default:0
+      default: 0,
+    },
+    distance: {
+      type: Number,
     },
     addressOrigin: {
       streetName: String,
       number: String,
       postalCode: String,
-      localidad:String
+      localidad: String,
+      province: String,
     },
     addressDestination: {
-        streetName: String,
-        number: String,
-        postalCode: String,
-        localidad:String
+      streetName: String,
+      number: String,
+      postalCode: String,
+      localidad: String,
+      province: String,
     },
-    totalPrice:{
-        type: Number,
+    totalPrice: {
+      type: Number,
     },
     valoracion: {
       type: Number,
-      default:0
+      default: 0,
     },
   },
   {
