@@ -1,6 +1,6 @@
 import Tickets from '../models/Tickets.js';
 import fetch from 'node-fetch'
-import getToken  from '../../tokenCore.js';
+import sendToCore  from '../../integracionConCore.js';
 
 export const getTickets = async (req, res) => {
   try {
@@ -36,14 +36,15 @@ export const newTicket = async (req, res) => {
       idViaje,
       asunto ,
       detalle})
+      console.log(core)
     //checkeo si se envio bien al equipo de core
-      //if (core.status = 200){
-          //await ticket.save();
-          res.status(201).json({ message: 'ticket creado con éxito',res:core});
-      // }
-      // else{
-      //  res.status(500).json({ error: "hubo un error enviando el ticket al equipo core"});
-      // }
+      if (core.success){
+          await ticket.save();
+          res.status(201).json({ message: 'ticket creado con éxito'});
+      }
+      else{
+       res.status(500).json({ error: "hubo un error enviando el ticket al equipo core", core:core});
+      }
 
 
     
@@ -62,27 +63,5 @@ export const updateTicket = async (req,res) =>{
   } catch (error) {
     
   }
-}
-
-async function sendToCore(newTicket) {
-  const core_endpoint = process.env.TEST_ENDPOINT
-  const responseToken= await getToken()
-
-  const t = {
-    exchage:"new_driver_tickets",
-    message:newTicket
-  }
-  const response = await fetch(core_endpoint, {
-    method: "POST",
-    body: JSON.stringify(t),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      "Authorization": responseToken.token //ver como refrescar y poner el token aca
-    }
-  }).then(response => response.json())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
-  const res = await response
-  return res
 }
 
