@@ -1,6 +1,6 @@
 import Tickets from '../models/Tickets.js';
 import fetch from 'node-fetch'
-import sendToCore  from '../../integracionConCore.js';
+import sendNewTicketToCore  from '../../integracionConCore.js';
 
 export const getTickets = async (req, res) => {
   try {
@@ -30,7 +30,7 @@ export const newTicket = async (req, res) => {
       asunto ,
       detalle
     });
-    const core = await sendToCore(
+    const core = await sendNewTicketToCore(
       {idSolicitante,
       idReclamado,
       idViaje,
@@ -43,7 +43,7 @@ export const newTicket = async (req, res) => {
           res.status(201).json({ message: 'ticket creado con éxito'});
       }
       else{
-       res.status(500).json({ error: "hubo un error enviando el ticket al equipo core", core:core});
+       res.status(500).json({ error: "hubo un error enviando el ticket al equipo core. No se genero un nuevo ticket", core:core});
       }
 
 
@@ -54,14 +54,27 @@ export const newTicket = async (req, res) => {
 };
 
 export const updateTicket = async (req,res) =>{
+  const modifiedDate = new Date(Date.now())
+  
   try {
-    const {} = req.body;
-    //TODO
-
-
-
-  } catch (error) {
+    const {idTicket,newStatus,timestampActualizacion} = req.body;
+    const update={
+      status: newStatus,
+      timestampActualizacion:timestampActualizacion || modifiedDate.toISOString()
+    }
     
-  }
+      const ticket = await Tickets.findOneAndUpdate(
+        { idTicket: idTicket },
+        { $set: update},
+        { new: true }
+      );
+      if (!ticket) {
+        return res.status(404).json({ message: "ticket no encontrado" });
+      }
+  
+      res.status(200).json(ticket);
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
 }
 
