@@ -9,23 +9,36 @@ export const newPago = async (req, res) => {
 
     const viaje = await Viajes.findById(viajeId);
 
-    console.log(viaje);
+    // console.log(viaje);
 
     const bill_generated = {
-      distance: viaje.distance,
-      origen: viaje.addressOrigin,
-      destino: viaje.addressDestination,
+      distance: viaje.distance || "",
+      // origen: viaje.addressOrigin,
+      origen: {
+        calle: viaje.addressOrigin.streetName,
+        numero: viaje.addressOrigin.number,
+        localidad: viaje.addressOrigin.localidad,
+        provincia: viaje.addressOrigin.provincia || "",
+      },
+      destino: {
+        calle: viaje.addressDestination.streetName,
+        numero: viaje.addressDestination.number,
+        localidad: viaje.addressDestination.localidad,
+        provincia: viaje.addressDestination.provincia || "",
+      },
       fechaViaje: viaje.startTimestamp,
       conceptos: [
         {
-          concepto: "",
+          concepto: "VIAJE",
           monto: viaje.totalPrice,
         },
       ],
       chofer: viaje.choferID,
-      // pasajero: viaje.pasajeroID,  -->  VER COMO OBTNER
-      // idViaje: viaje.viajeID,      -->  VER COMO OBTENER
+      pasajero: viaje.pasajeroID || "",
+      idViaje: viaje.viajeID || "",
     };
+
+    console.log(bill_generated);
 
     const pago = new Pagos({
       viajeId,
@@ -35,15 +48,15 @@ export const newPago = async (req, res) => {
 
     const savedPago = await pago.save();
 
-    if (savedPago) {
-      try {
-        console.log(bill_generated)
-        const res = await sendGeneratedBillToCore(bill_generated);
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    // if (savedPago) {
+    //   try {
+    //     console.log(bill_generated)
+    //     const res = await sendGeneratedBillToCore(bill_generated);
+    //     console.log(res);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
     res.status(201).json({ message: "Pago grabado con exito.", savedPago });
   } catch (error) {
     res.status(500).json({ error: error.message });
