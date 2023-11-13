@@ -12,7 +12,6 @@ export const createViaje = async (req, res) => {
       valoracion,
     } = req.body;
 
-<<<<<<< HEAD
     const newViaje = new Viaje({
       choferID,
       startTimestamp,
@@ -26,27 +25,6 @@ export const createViaje = async (req, res) => {
   } catch (error) {
     restart.status(500).json({ error: error.message });
   }
-=======
-export const createViaje = async (req,res) =>{
-    try {
-        const {choferID, startTimestamp,addressOrigin,addressDestination,totalPrice,valoracion} = req.body
-
-        const newViaje = new Viaje({
-            choferID, 
-            startTimestamp,
-            addressOrigin,
-            addressDestination,
-            totalPrice,
-            valoracion,
-            duration_sec
-
-        })
-        const savedViaje = await newViaje.save();
-        res.status(201).json(savedViaje);
-    } catch(error){
-        restart.status(500).json({error: error.message})
-    }
->>>>>>> 0769958f4d12104945cc85a9c6c59f4db39a3a37
 };
 
 export const getViajes = async (req, res) => {

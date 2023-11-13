@@ -212,18 +212,4 @@ export const updatePassword = async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
-<<<<<<< HEAD
 };
-=======
-}
-export const deleteUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await User.findByIdAndDelete(id);
-    res.status(200).json({ message: "Usuario eliminado" });
-  }
-  catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-}
->>>>>>> 0769958f4d12104945cc85a9c6c59f4db39a3a37
