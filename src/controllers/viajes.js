@@ -11,7 +11,8 @@ export const createViaje = async (req,res) =>{
             addressOrigin,
             addressDestination,
             totalPrice,
-            valoracion
+            valoracion,
+            duration_sec
 
         })
         const savedViaje = await newViaje.save();

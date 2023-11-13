@@ -41,6 +41,41 @@ export const getByPlate = async (req, res) => {
   }
 };
 
+export const updateStatusById = async (id, estado) => {
+  try {
+    var userID=id;
+    var estadoUpdate=estado;
+    console.log(userID)
+    console.log(estadoUpdate)
+    // BUSCAR AL USUARIO POR ID
+    const user = await User.findById(id);
+
+    // VERIFICAR SI EL USUARIO EXISTE
+    if (!user) {
+      console.log("user no encontrado");
+      throw new Error("Usuario no encontrado");
+    }
+
+    var estadoNuevo = estado;
+    if (estadoNuevo === "FINALIZADO") {
+      user.status = true;
+    } else if (estadoNuevo === "RECHAZADO") {
+      user.status = false;
+    } else {
+      user.status = false;
+    }
+
+    console.log(user);
+    await user.save();
+    return user;
+  } catch (error) {
+    // MANEJAR ERRORES
+    console.error(error.message);
+    throw new Error(error.message); // Cambiado de res.status(500) a throw new Error
+  }
+};
+
+
 //UPDATE
 export const updateUsuario = async (req, res) => {
   try {
@@ -149,6 +184,16 @@ export const updatePassword = async (req, res) => {
       return res.status(200).json({ msg: "Password changed successfully. " });
 
     }
+  }
+  catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ message: "Usuario eliminado" });
   }
   catch (error) {
     res.status(404).json({ message: error.message });
