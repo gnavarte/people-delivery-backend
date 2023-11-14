@@ -45,10 +45,10 @@ export const getByPlate = async (req, res) => {
 
 export const updateStatusById = async (id, estado) => {
   try {
-    var userID=id;
-    var estadoUpdate=estado;
-    console.log(userID)
-    console.log(estadoUpdate)
+    var userID = id;
+    var estadoUpdate = estado;
+    console.log(userID);
+    console.log(estadoUpdate);
     // BUSCAR AL USUARIO POR ID
     const user = await User.findById(id);
 
@@ -77,8 +77,8 @@ export const updateStatusById = async (id, estado) => {
   }
 };
 
-
 //UPDATE
+
 export const updateUsuario = async (req, res) => {
   try {
     const { id } = req.params;
@@ -128,14 +128,28 @@ export const addCalificacion = async (req, res) => {
     res.status(200).json(user);
 
     try {
-      const allViajes = await Viaje.find({ choferID: id });
+      // console.log(user)
+      // const allViajes = await Viaje.find({ choferID: id });
+      // console.log(allViajes)
       const calificaciones = [];
-      allViajes.forEach((e) => calificaciones.push(e.valoracion));
-      
+      user.rate.forEach((e) => calificaciones.push(e));
+
+      // console.log(calificaciones);
+
+      let prom = 0;
+      for (const cal of calificaciones) {
+        prom += parseFloat(cal);
+        // console.log(cal)
+      }
+
+      // console.log(prom / calificaciones.length);
+
       const data = {
-        choferId: id,
-        calificaciones,
+        idChofer: id,
+        calificacionActualizada: parseFloat(prom / calificaciones.length),
       };
+
+      console.log(data);
       const res = await sendCalificacionesToCore(data);
       console.log(res);
     } catch (error) {
@@ -209,6 +223,16 @@ export const updatePassword = async (req, res) => {
       user.save();
       return res.status(200).json({ msg: "Password changed successfully. " });
     }
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ message: "Usuario eliminado" });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

@@ -25,8 +25,6 @@ app.use(cors());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
-
-
 /* FILE STORAGE */
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -50,9 +48,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/viajes", viajesRoutes);
 app.use("/api/pagos", pagosRoutes);
-app.use("/api/autos", autosRoutes)
-app.use('/api/ticket', ticketsRoute)
-
+app.use("/api/autos", autosRoutes);
+app.use("/api/ticket", ticketsRoute);
 
 /* SOCKET.IO */
 const httpServer = createServer(app);
@@ -69,8 +66,7 @@ app.post("/api/viajes/newTripCallback", (req, res) => {
   console.log(`>>> Socket.io: ${req.body} received.`);
   io.emit("newTrip", req.body);
   res.status(200).send("New trip data received.");
-}
-);
+});
 
 app.post("/api/updateDriverStatus", async (req, res) => {
   try {
@@ -86,6 +82,7 @@ app.post("/api/updateDriverStatus", async (req, res) => {
     res.status(500).send("Error processing the request.");
   }
 });
+
 /* MOONGOSE SETUP & SERVER START */
 const PORT = process.env.PORT || 6001;
 mongoose

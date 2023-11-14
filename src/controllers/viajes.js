@@ -19,6 +19,7 @@ export const createViaje = async (req, res) => {
       addressDestination,
       totalPrice,
       valoracion,
+      duration_sec,
     });
     const savedViaje = await newViaje.save();
     res.status(201).json(savedViaje);
@@ -88,7 +89,7 @@ export const updateViaje = async (req, res) => {
 
       console.log(closed_trip);
       const res = await sendClosedTripToCore(closed_trip);
-      console.log(res)
+      console.log(res);
     } else {
       console.log("NEW STATUS: ", viaje.status);
     }

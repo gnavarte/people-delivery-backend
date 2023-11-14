@@ -48,15 +48,15 @@ export const newPago = async (req, res) => {
 
     const savedPago = await pago.save();
 
-    // if (savedPago) {
-    //   try {
-    //     console.log(bill_generated)
-    //     const res = await sendGeneratedBillToCore(bill_generated);
-    //     console.log(res);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
+    if (savedPago) {
+      try {
+        console.log(bill_generated)
+        const res = await sendGeneratedBillToCore(bill_generated);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
     res.status(201).json({ message: "Pago grabado con exito.", savedPago });
   } catch (error) {
     res.status(500).json({ error: error.message });
