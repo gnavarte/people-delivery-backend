@@ -1,6 +1,6 @@
 import express from "express";
 import { login } from "../controllers/auth.js";
-import { updatePassword , forgotPassword,deleteUser} from "../controllers/usuarios.js";
+import { updatePassword, forgotPassword, deleteUser } from "../controllers/usuarios.js";
 const router = express.Router();
 
 router.post("/login", login);

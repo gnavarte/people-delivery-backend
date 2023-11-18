@@ -1,4 +1,6 @@
+import { sendCalificacionesToCore } from "../../integracionConCore.js";
 import User from "../models/Usuarios.js";
+import Viaje from "../models/Viajes.js";
 import bcrypt from "bcrypt";
 // READ
 export const getUsers = async (req, res) => {
@@ -43,10 +45,10 @@ export const getByPlate = async (req, res) => {
 
 export const updateStatusById = async (id, estado) => {
   try {
-    var userID=id;
-    var estadoUpdate=estado;
-    console.log(userID)
-    console.log(estadoUpdate)
+    var userID = id;
+    var estadoUpdate = estado;
+    console.log(userID);
+    console.log(estadoUpdate);
     // BUSCAR AL USUARIO POR ID
     const user = await User.findById(id);
 
@@ -75,8 +77,8 @@ export const updateStatusById = async (id, estado) => {
   }
 };
 
-
 //UPDATE
+
 export const updateUsuario = async (req, res) => {
   try {
     const { id } = req.params;
@@ -96,6 +98,19 @@ export const updateUsuario = async (req, res) => {
   }
 };
 
+export const getCalificacionesById = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const allViajes = await Viaje.find({ choferID: id });
+    const calificaciones = [];
+    allViajes.forEach((e) => calificaciones.push(e.valoracion));
+
+    res.json({ calificaciones });
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const addCalificacion = async (req, res) => {
   try {
     const { id } = req.params;
@@ -111,6 +126,35 @@ export const addCalificacion = async (req, res) => {
     }
 
     res.status(200).json(user);
+
+    try {
+      // console.log(user)
+      // const allViajes = await Viaje.find({ choferID: id });
+      // console.log(allViajes)
+      const calificaciones = [];
+      user.rate.forEach((e) => calificaciones.push(e));
+
+      // console.log(calificaciones);
+
+      let prom = 0;
+      for (const cal of calificaciones) {
+        prom += parseFloat(cal);
+        // console.log(cal)
+      }
+
+      // console.log(prom / calificaciones.length);
+
+      const data = {
+        idChofer: id,
+        calificacionActualizada: parseFloat(prom / calificaciones.length),
+      };
+
+      console.log(data);
+      const res = await sendCalificacionesToCore(data);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   } catch (error) {}
 };
 
@@ -120,21 +164,23 @@ export const setStatus = async (req, res) => {
 
     console.log(id);
 
-    const user = await User.findById(id)
-    if (!user) return res.status(400).json({msg: 'Usuario no encontrado'})
+    const user = await User.findById(id);
+    if (!user) return res.status(400).json({ msg: "Usuario no encontrado" });
 
     user.status = !user.status;
     user.save();
-   
+
     res.status(200).json(user);
   } catch (error) {}
 };
 export const getUserByEmail = async (req, res) => {
   try {
     const { email } = req.body;
-    console.log(email)
+    console.log(email);
     if (!email) {
-      return res.status(400).json({ message: "Debes proporcionar un correo electrónico" });
+      return res
+        .status(400)
+        .json({ message: "Debes proporcionar un correo electrónico" });
     }
     const user = await User.findOne({ email });
 
@@ -143,59 +189,51 @@ export const getUserByEmail = async (req, res) => {
     }
 
     return res.status(404).json({ message: "Usuario no encontrado" });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error del servidor" });
   }
 };
-export const  forgotPassword = async (req, res) => {
+export const forgotPassword = async (req, res) => {
   try {
-    const { email,newPassword } = req.body;
+    const { email, newPassword } = req.body;
     const user = await User.findOne({ email: email });
-    if (!user) return res.status(400).json({ msg: 'User does not exist. ' });
+    if (!user) return res.status(400).json({ msg: "User does not exist. " });
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(newPassword, salt);
     user.password = passwordHash;
     user.save();
     return res.status(200).json({ msg: "Password changed successfully. " });
-
-
-  }
-  catch (error) {
+  } catch (error) {
     res.status(404).json({ message: error.message });
   }
-
-}
+};
 export const updatePassword = async (req, res) => {
   try {
     const { email, actualPassword, newPassword } = req.body;
-    const user = await User.findOne({email : email});
+    const user = await User.findOne({ email: email });
     const isMatch = await bcrypt.compare(actualPassword, user.password);
 
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid credentials. " });
-    }
-    else {
+    } else {
       const salt = await bcrypt.genSalt();
       const passwordHash = await bcrypt.hash(newPassword, salt);
       user.password = passwordHash;
       user.save();
       return res.status(200).json({ msg: "Password changed successfully. " });
-
     }
-  }
-  catch (error) {
+  } catch (error) {
     res.status(404).json({ message: error.message });
   }
-}
+};
+
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
     await User.findByIdAndDelete(id);
     res.status(200).json({ message: "Usuario eliminado" });
-  }
-  catch (error) {
+  } catch (error) {
     res.status(404).json({ message: error.message });
   }
-}
+};

@@ -11,6 +11,7 @@ import authRoutes from "./src/routes/auth.routes.js";
 import viajesRoutes from "./src/routes/viajes.routes.js";
 import pagosRoutes from "./src/routes/pagos.routes.js";
 import autosRoutes from "./src/routes/autos.routes.js";
+import ticketsRoute from "./src/routes/tickets.routes.js";
 import { register } from "./src/controllers/auth.js";
 import { Server } from "socket.io";
 import { createServer } from "http";
@@ -23,8 +24,6 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-
-
 
 /* FILE STORAGE */
 const storage = multer.diskStorage({
@@ -49,7 +48,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/viajes", viajesRoutes);
 app.use("/api/pagos", pagosRoutes);
-app.use("/api/autos", autosRoutes)
+app.use("/api/autos", autosRoutes);
+app.use("/api/ticket", ticketsRoute);
 
 /* SOCKET.IO */
 const httpServer = createServer(app);
@@ -66,8 +66,7 @@ app.post("/api/viajes/newTripCallback", (req, res) => {
   console.log(`>>> Socket.io: ${req.body} received.`);
   io.emit("newTrip", req.body);
   res.status(200).send("New trip data received.");
-}
-);
+});
 
 app.post("/api/updateDriverStatus", async (req, res) => {
   try {
@@ -83,6 +82,7 @@ app.post("/api/updateDriverStatus", async (req, res) => {
     res.status(500).send("Error processing the request.");
   }
 });
+
 /* MOONGOSE SETUP & SERVER START */
 const PORT = process.env.PORT || 6001;
 mongoose
