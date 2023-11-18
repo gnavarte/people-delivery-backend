@@ -10,6 +10,7 @@ export const createViaje = async (req, res) => {
       addressDestination,
       totalPrice,
       valoracion,
+      duration_sec,
     } = req.body;
 
     const newViaje = new Viaje({
@@ -21,6 +22,8 @@ export const createViaje = async (req, res) => {
       valoracion,
       duration_sec,
     });
+
+    console.log(newViaje);
     const savedViaje = await newViaje.save();
     res.status(201).json(savedViaje);
   } catch (error) {
@@ -82,7 +85,8 @@ export const updateViaje = async (req, res) => {
 
     if (viaje.status.toLowerCase() === "closed") {
       const closed_trip = {
-        viaje_id: "",
+        // viaje_id: "",
+        viaje_id: 38,
         status: "closed",
         finishTimestamp: new Date(Date.now()).toLocaleString(),
       };

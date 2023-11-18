@@ -14,7 +14,7 @@ const ViajeSchema = new mongoose.Schema(
     startTimestamp: {
       type: Date,
     },
-
+//test
     finishTimestamp: {
       type: Date,
     },

@@ -12,7 +12,8 @@ export const newPago = async (req, res) => {
     // console.log(viaje);
 
     const bill_generated = {
-      distance: viaje.distance || "",
+      // distance: viaje.distance || "",
+      km: 123,
       // origen: viaje.addressOrigin,
       origen: {
         calle: viaje.addressOrigin.streetName,
@@ -33,9 +34,12 @@ export const newPago = async (req, res) => {
           monto: viaje.totalPrice,
         },
       ],
-      chofer: viaje.choferID,
-      pasajero: viaje.pasajeroID || "",
-      idViaje: viaje.viajeID || "",
+      // chofer: viaje.choferID,
+      chofer: "64fd10669bd9b570faa7b1c3",
+      // pasajero: viaje.pasajeroID || "18",
+      // idViaje: viaje.viajeID || "18",
+      idViaje: 38,
+      pasajero: 18,
     };
 
     console.log(bill_generated);
@@ -50,7 +54,7 @@ export const newPago = async (req, res) => {
 
     if (savedPago) {
       try {
-        console.log(bill_generated)
+        console.log(bill_generated);
         const res = await sendGeneratedBillToCore(bill_generated);
         console.log(res);
       } catch (error) {
