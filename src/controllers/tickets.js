@@ -5,7 +5,7 @@ import sendToCore  from '../../integracionConCore.js';
 export const getTickets = async (req, res) => {
   try {
       const { idSolicitante } = req.body;
-      const tickets = await Tickets.find({ idSolicitante: idSolicitante });
+      const tickets = await Tickets.find({ idSolicitante: idSolicitante }).sort({timestampActualizacion:'desc'});
       
       res.status(200).json(tickets);
       
@@ -20,7 +20,8 @@ export const newTicket = async (req, res) => {
       idReclamado,
       idViaje,
       asunto ,
-      detalle
+      detalle,
+      TipoUsuario
     } = req.body;
 
     const ticket = new Tickets({
@@ -28,14 +29,16 @@ export const newTicket = async (req, res) => {
       idReclamado,
       idViaje,
       asunto ,
-      detalle
+      detalle,
+      TipoUsuario
     });
     const core = await sendToCore(
       {idSolicitante,
       idReclamado,
       idViaje,
       asunto ,
-      detalle})
+      detalle,
+      TipoUsuario})
       console.log(core)
     //checkeo si se envio bien al equipo de core
       if (core.success){
