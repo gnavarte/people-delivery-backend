@@ -5,6 +5,8 @@ export const createViaje = async (req, res) => {
   try {
     const {
       choferID,
+      viajeID,
+      pasajeroID,
       startTimestamp,
       addressOrigin,
       addressDestination,
@@ -15,6 +17,8 @@ export const createViaje = async (req, res) => {
 
     const newViaje = new Viaje({
       choferID,
+      viajeID,
+      pasajeroID,
       startTimestamp,
       addressOrigin,
       addressDestination,
@@ -74,29 +78,31 @@ export const assingToChofer = async (req, res) => {
 export const updateViaje = async (req, res) => {
   try {
     const { id } = req.params;
-    const { newStatus } = req.body;
-    const viaje = await Viaje.findByIdAndUpdate(
-      id,
-      { status: newStatus.toLowerCase() },
-      { new: true }
-    );
+    const { newStatus, idViaje } = req.body;
+    console.log(newStatus, idViaje);
+    // const viaje = await Viaje.findByIdAndUpdate(
+    //   id,
+    //   { status: newStatus.toLowerCase() },
+    //   { new: true }
+    // );
 
-    res.status(200).json(viaje);
+    // res.status(200).json(viaje);
 
-    if (viaje.status.toLowerCase() === "closed") {
-      const closed_trip = {
-        // viaje_id: "",
-        viaje_id: 38,
-        status: "closed",
-        finishTimestamp: new Date(Date.now()).toLocaleString(),
-      };
+    // if (viaje.status.toLowerCase() === "closed") {
+    //   const closed_trip = {
+    //     viaje_id: "111",
+    //     // viaje_id: idViaje,
+    //     status: "closed",
+    //     finishTimestamp: new Date(Date.now()).toLocaleString(),
+    //   };
 
-      console.log(closed_trip);
-      const res = await sendClosedTripToCore(closed_trip);
-      console.log(res);
-    } else {
-      console.log("NEW STATUS: ", viaje.status);
-    }
+    //   console.log(closed_trip);
+    //   const res = await sendClosedTripToCore(closed_trip);
+    //   console.log(res);
+    // } else {
+    //   console.log("NEW STATUS: ", viaje.status);
+    // }
+    res.status(200).json({ success: true });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

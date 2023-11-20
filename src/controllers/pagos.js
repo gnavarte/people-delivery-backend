@@ -3,6 +3,7 @@ import Pagos from "../models/Pagos.js";
 import Viajes from "../models/Viajes.js";
 
 // CREATE
+
 export const newPago = async (req, res) => {
   try {
     const { viajeId } = req.body;
@@ -38,7 +39,7 @@ export const newPago = async (req, res) => {
       chofer: "64fd10669bd9b570faa7b1c3",
       // pasajero: viaje.pasajeroID || "18",
       // idViaje: viaje.viajeID || "18",
-      idViaje: 38,
+      idViaje: 100,
       pasajero: 18,
     };
 
