@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
+const conn =  mongoose.connection
 
 const TicketsSchema = new mongoose.Schema(
   {
-    idTicket: { type: String, required: false },
-    idSolicitante: { type: String, required: true },
-    idReclamado: { type: String, required: true },
-    idViaje: { type: String, required: true },
+    idTicket:{type:Number, required:true},
+    idSolicitante: { type: Number, required: true },
+    idReclamado: { type: Number, required: true },
+    idViaje: { type: Number, required: true },
     asunto : { type: String, required: true },
     detalle: { type: String, required: true },
     status : { type: String, required: true, default:'NEW' },
     prioridad: { type: String, required: true, default:'BAJA' },
-    TipoUsuario:{type: String, required: true },
+    TipoUsuario:{type: String, required: true,default:'CHOFER' },
     timestampCreacion: {type: Date,required: false},
     timestampActualizacion: {type: Date,required: false}
 
@@ -18,7 +19,6 @@ const TicketsSchema = new mongoose.Schema(
   { timestamps: true }
 );
 TicketsSchema.pre('save', function(next) {
-  this.idTicket = this._id
   this.timestampCreacion = this.createdAt
   this.timestampActualizacion = this.updatedAt
   next()

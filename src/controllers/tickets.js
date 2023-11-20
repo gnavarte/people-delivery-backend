@@ -1,6 +1,8 @@
 import Tickets from '../models/Tickets.js';
 import fetch from 'node-fetch'
 import sendToCore  from '../../integracionConCore.js';
+import mongoose from 'mongoose';
+import Counter from '../models/Counter.js';
 
 export const getTickets = async (req, res) => {
   try {
@@ -13,7 +15,18 @@ export const getTickets = async (req, res) => {
       res.status(404).json({ error: error.message });
   }
   };
-
+  
+  async function getNextSequence(name) {
+    var ret = await Counter.findOneAndUpdate(         
+            { name: name },
+            {
+              $inc:{ seq: 1 }
+            },
+            {new: true}
+           
+    )
+  return ret.seq
+  }
 export const newTicket = async (req, res) => {
   try {
     const {
@@ -24,8 +37,10 @@ export const newTicket = async (req, res) => {
       detalle
     } = req.body;
     const TipoUsuario = req.body.TipoUsuario || "CHOFER"
-
+    const idTicket = await getNextSequence('idTicket')
+    console.log(`idticket: ${idTicket}`)
     const ticket = new Tickets({
+      idTicket,
       idSolicitante,
       idReclamado,
       idViaje,
@@ -33,20 +48,21 @@ export const newTicket = async (req, res) => {
       detalle,
       TipoUsuario
     });
-    const core = await sendToCore(
-      {idSolicitante,
-      idReclamado,
-      idViaje,
-      asunto ,
-      detalle,
-      TipoUsuario})
-      console.log("###")
-      console.log(core)
-    const coreRes = JSON.parse(core)
+    await ticket.save();
+    // const core = await sendToCore(
+    //   {idSolicitante,
+    //   idReclamado,
+    //   idViaje,
+    //   asunto ,
+    //   detalle,
+    //   TipoUsuario})
+    //   console.log("###")
+    //   console.log(core)
+    // const coreRes = JSON.parse(core)
     //checkeo si se envio bien al equipo de core
-      if (coreRes.success){
-          await ticket.save();
-          res.status(201).json({ message: 'ticket creado con éxito'});
+
+      if (ticket){
+          res.status(201).json({ message: 'ticket creado con éxito', ticket:ticket});
       }
       else{
        res.status(500).json({ error: "hubo un error enviando el ticket al equipo core", core:core});
