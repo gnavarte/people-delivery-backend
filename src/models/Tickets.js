@@ -12,14 +12,13 @@ const TicketsSchema = new mongoose.Schema(
     status : { type: String, required: true, default:'NEW' },
     prioridad: { type: String, required: true, default:'BAJA' },
     TipoUsuario:{type: String, required: true,default:'CHOFER' },
-    timestampCreacion: {type: Date,required: false},
+    timestampCreacion: {type: Date,required: true},
     timestampActualizacion: {type: Date,required: false}
 
   },
   { timestamps: true }
 );
 TicketsSchema.pre('save', function(next) {
-  this.timestampCreacion = this.createdAt
   this.timestampActualizacion = this.updatedAt
   next()
 })

@@ -34,19 +34,29 @@ export const newTicket = async (req, res) => {
       idReclamado,
       idViaje,
       asunto ,
+      prioridad,
+      status,
       detalle
     } = req.body;
     const TipoUsuario = req.body.TipoUsuario || "CHOFER"
     const idTicket = await getNextSequence('idTicket')
     console.log(`idticket: ${idTicket}`)
+    var d = new Date();
+    d = new Date(d.getTime());
+    var date_format_str = d.getFullYear().toString()+"-"+((d.getMonth()+1).toString().length==2?(d.getMonth()+1).toString():"0"+(d.getMonth()+1).toString())+"-"+(d.getDate().toString().length==2?d.getDate().toString():"0"+d.getDate().toString())+" "+(d.getHours().toString().length==2?d.getHours().toString():"0"+d.getHours().toString())+":"+((parseInt(d.getMinutes()/5)*5).toString().length==2?(parseInt(d.getMinutes()/5)*5).toString():"0"+(parseInt(d.getMinutes()/5)*5).toString())+":00";
+    
+
     const ticket = new Tickets({
       idTicket,
       idSolicitante,
       idReclamado,
       idViaje,
       asunto ,
+      status,
+      prioridad,
       detalle,
-      TipoUsuario
+      TipoUsuario,
+      timestampCreacion: date_format_str
     });
     await ticket.save();
     // const core = await sendToCore(

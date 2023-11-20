@@ -38,7 +38,7 @@ export const createViaje = async (req, res) => {
 export const getViajes = async (req, res) => {
   try {
     const { email } = req.body;
-    const viajes = await Viaje.find({ choferID: email });
+    const viajes = await Viaje.find({ email: email });
     res.status(200).json(viajes);
   } catch (error) {
     res.status(404).json({ error: error.message });
