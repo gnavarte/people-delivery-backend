@@ -68,6 +68,24 @@ app.post("/api/viajes/newTripCallback", (req, res) => {
   res.status(200).send("New trip data received.");
 });
 
+app.post("/api/viajes/acceptedTripCallback", (req, res) => {
+  console.log(`>>> Socket.io: ${req.body} received.`);
+  io.emit("acceptedTrip", req.body);
+  res.status(200).send("Accepted trip data received.");
+});
+
+app.post("/api/viajes/ongoingTripCallback", (req, res) => {
+  console.log(`>>> Socket.io: ${req.body} received.`);
+  io.emit("ongoingTrip", req.body);
+  res.status(200).send("Ongoing trip data received.");
+});
+
+app.post("/api/viajes/finishedTripCallback", (req, res) => {
+  console.log(`>>> Socket.io: ${req.body} received.`);
+  io.emit("finishedTrip", req.body);
+  res.status(200).send("Finished trip data received.");
+});
+
 app.post("/api/updateDriverStatus", async (req, res) => {
   try {
     var id = req.body.idChofer;
