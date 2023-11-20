@@ -1,6 +1,20 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/Usuarios.js";
+import Counter from '../models/Counter.js';
+  
+async function getNextSequence(name) {
+  var ret = await Counter.findOneAndUpdate(         
+          { name: name },
+          {
+            $inc:{ seq: 1 }
+          },
+          {new: true}
+         
+  )
+return ret.seq
+}
+
 
 // REGISTER USER
 export const register = async (req, res) => {
@@ -11,8 +25,9 @@ export const register = async (req, res) => {
 
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
-
+    const idChoferNum= await getNextSequence('idChofer')
     const newUser = new User({
+      idChoferNum,
       firstName,
       lastName,
       address,
