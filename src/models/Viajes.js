@@ -3,7 +3,15 @@ import mongoose from "mongoose";
 const ViajeSchema = new mongoose.Schema(
   {
     choferID: {
-      type: String,
+      type: Number,
+      required: true,
+    },
+    viajeID: {
+      type: Number,
+      required: true,
+    },
+    pasajeroID: {
+      type: Number,
       required: true,
     },
     status: {
@@ -14,7 +22,7 @@ const ViajeSchema = new mongoose.Schema(
     startTimestamp: {
       type: Date,
     },
-//test
+    //test
     finishTimestamp: {
       type: Date,
     },
