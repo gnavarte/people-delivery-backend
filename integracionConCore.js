@@ -30,8 +30,6 @@ async function getToken() {
   return res;
 }
 async function sendToCore(newTicket) {
-  token = await getToken();
-  console.log(token);
   const body = {
     exchage: "new_driver_tickets",
     message: newTicket,

@@ -13,6 +13,7 @@ export const getTickets = async (req, res) => {
       res.status(404).json({ error: error.message });
   }
   };
+
 export const newTicket = async (req, res) => {
   try {
     const {
@@ -20,9 +21,9 @@ export const newTicket = async (req, res) => {
       idReclamado,
       idViaje,
       asunto ,
-      detalle,
-      TipoUsuario
+      detalle
     } = req.body;
+    const TipoUsuario = req.body.TipoUsuario || "CHOFER"
 
     const ticket = new Tickets({
       idSolicitante,
@@ -39,9 +40,11 @@ export const newTicket = async (req, res) => {
       asunto ,
       detalle,
       TipoUsuario})
+      console.log("###")
       console.log(core)
+    const coreRes = JSON.parse(core)
     //checkeo si se envio bien al equipo de core
-      if (core.success){
+      if (coreRes.success){
           await ticket.save();
           res.status(201).json({ message: 'ticket creado con éxito'});
       }
@@ -57,14 +60,26 @@ export const newTicket = async (req, res) => {
 };
 
 export const updateTicket = async (req,res) =>{
-  try {
-    const {} = req.body;
-    //TODO
-
-
-
-  } catch (error) {
+  const modifiedDate = new Date(Date.now())
+  try{
+    const {idTicket,newStatus,timestampActualizacion} = req.body;
+    const update={
+      status: newStatus,
+      timestampActualizacion:timestampActualizacion || modifiedDate.toISOString()
+    }
     
-  }
+      const ticket = await Tickets.findOneAndUpdate(
+        { idTicket: idTicket },
+        { $set: update},
+        { new: true }
+      );
+      if (!ticket) {
+        return res.status(404).json({ message: "ticket no encontrado" });
+      }  
+      res.status(200).json(ticket);
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
+
 }
 
