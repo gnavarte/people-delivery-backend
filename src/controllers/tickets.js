@@ -59,19 +59,21 @@ export const newTicket = async (req, res) => {
       timestampCreacion: date_format_str
     });
     await ticket.save();
-    // const core = await sendToCore(
-    //   {idSolicitante,
-    //   idReclamado,
-    //   idViaje,
-    //   asunto ,
-    //   detalle,
-    //   TipoUsuario})
-    //   console.log("###")
-    //   console.log(core)
-    // const coreRes = JSON.parse(core)
-    //checkeo si se envio bien al equipo de core
-
-      if (ticket){
+    const core = await sendToCore(
+      {
+          idTicket,
+          idSolicitante,
+          idReclamado,
+          idViaje,
+          asunto ,
+          detalle,
+          TipoUsuario
+      })
+      console.log("###")
+      console.log(core)
+    const coreRes = JSON.parse(core)
+      console.log(coreRes)
+      if (coreRes["success"]){
           res.status(201).json({ message: 'ticket creado con éxito', ticket:ticket});
       }
       else{
