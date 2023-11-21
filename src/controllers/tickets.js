@@ -1,4 +1,5 @@
 import Tickets from '../models/Tickets.js';
+import Usuarios from '../models/Usuarios.js';
 import fetch from 'node-fetch'
 import sendToCore  from '../../integracionConCore.js';
 import mongoose from 'mongoose';
@@ -7,7 +8,8 @@ import Counter from '../models/Counter.js';
 export const getTickets = async (req, res) => {
   try {
       const { idSolicitante } = req.body;
-      const tickets = await Tickets.find({ idSolicitante: idSolicitante }).sort({timestampActualizacion:'desc'});
+      const user = await Usuarios.findOne({email: idSolicitante })
+      const tickets = await Tickets.find({ idSolicitante: user.idChoferNum }).sort({timestampActualizacion:'desc'});
       
       res.status(200).json(tickets);
       
