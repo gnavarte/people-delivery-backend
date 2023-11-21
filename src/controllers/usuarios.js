@@ -185,7 +185,7 @@ export const getUserByEmail = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      return res.status(201).json({ userID: user._id });
+      return res.status(201).json({ user: user });
     }
 
     return res.status(404).json({ message: "Usuario no encontrado" });
