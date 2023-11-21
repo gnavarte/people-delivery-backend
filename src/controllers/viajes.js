@@ -1,5 +1,6 @@
 import { sendClosedTripToCore } from "../../integracionConCore.js";
 import Viaje from "../models/Viajes.js";
+import Usuarios from '../models/Usuarios.js'
 
 export const createViaje = async (req, res) => {
   try {
@@ -38,7 +39,8 @@ export const createViaje = async (req, res) => {
 export const getViajes = async (req, res) => {
   try {
     const { email } = req.body;
-    const viajes = await Viaje.find({ email: email });
+    const user = await Usuarios.findOne({email: email })
+    const viajes = await Viaje.find({ choferID: user.idChoferNum }).sort({createdAt:'desc'});;
     res.status(200).json(viajes);
   } catch (error) {
     res.status(404).json({ error: error.message });

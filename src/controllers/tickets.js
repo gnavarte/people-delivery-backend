@@ -38,7 +38,7 @@ export const newTicket = async (req, res) => {
       asunto ,
       prioridad,
       status,
-      detalle
+      detalle 
     } = req.body;
     const tipoUsuario = req.body.tipoUsuario || "CHOFER"
     const idTicket = await getNextSequence('idTicket')
