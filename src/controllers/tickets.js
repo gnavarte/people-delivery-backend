@@ -40,7 +40,7 @@ export const newTicket = async (req, res) => {
       status,
       detalle
     } = req.body;
-    const TipoUsuario = req.body.TipoUsuario || "CHOFER"
+    const tipoUsuario = req.body.tipoUsuario || "CHOFER"
     const idTicket = await getNextSequence('idTicket')
     console.log(`idticket: ${idTicket}`)
     var d = new Date();
@@ -57,7 +57,7 @@ export const newTicket = async (req, res) => {
       status,
       prioridad,
       detalle,
-      TipoUsuario,
+      tipoUsuario,
       timestampCreacion: date_format_str
     });
     await ticket.save();
@@ -68,8 +68,11 @@ export const newTicket = async (req, res) => {
           idReclamado,
           idViaje,
           asunto ,
+          status,
+          prioridad,
           detalle,
-          TipoUsuario
+          tipoUsuario,
+          timestampCreacion:date_format_str
       })
       console.log("###")
       console.log(core)

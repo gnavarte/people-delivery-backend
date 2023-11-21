@@ -11,7 +11,7 @@ const TicketsSchema = new mongoose.Schema(
     detalle: { type: String, required: true },
     status : { type: String, required: true, default:'NEW' },
     prioridad: { type: String, required: true, default:'BAJA' },
-    TipoUsuario:{type: String, required: true,default:'CHOFER' },
+    tipoUsuario:{type: String, required: true,default:'CHOFER' },
     timestampCreacion: {type: Date,required: true},
     timestampActualizacion: {type: Date,required: false}
 
